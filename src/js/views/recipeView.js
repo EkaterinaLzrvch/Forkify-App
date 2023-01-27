@@ -1,6 +1,5 @@
 import View from './View.js';
-// new path to icons
-import icons from 'url:../../img/icons.svg';
+import icons from 'url:../../img/icons.svg'; // new path to icons
 import { Fraction } from 'fractional';
 
 export class RecipeView extends View {
@@ -8,7 +7,6 @@ export class RecipeView extends View {
   _errorMessage = 'We could not find that recipe. Please try again!';
   _message;
 
-  //Publisher
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }

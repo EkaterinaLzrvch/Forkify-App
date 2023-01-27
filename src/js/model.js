@@ -1,9 +1,7 @@
 import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
-// import { getJSON, sendJSON } from './helpers.js';
 import { AJAX } from './helpers.js';
 
-//all the data that we need for our application
 export const state = {
   recipe: {},
   search: {
@@ -26,16 +24,15 @@ const createRecipeObject = function (data) {
     servings: recipe.servings,
     cookingTime: recipe.cooking_time,
     ingredients: recipe.ingredients,
-    ...(recipe.key && { key: recipe.key }), //if the key exists
+    ...(recipe.key && { key: recipe.key }),
   };
 };
 
 export const loadRecipe = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}${id}?key=${KEY}`); //await the promise as it returns resolved value
+    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
     state.recipe = createRecipeObject(data);
 
-    //пометить текущий элемент как закладку или нет, если ид совпадает с ид из массива
     if (state.bookmarks.some(b => b.id === id)) state.recipe.bookmarked = true;
     else state.recipe.bookmarked = false;
 
@@ -77,7 +74,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
-    // newQt = oldQt * newServings / oldServings // 2 * 8 / 4 = 4
   });
 
   state.recipe.servings = newServings;
@@ -88,11 +84,7 @@ const persistBookmark = function () {
 };
 
 export const addBookmark = function (recipe) {
-  //Add bookmark
   state.bookmarks.push(recipe);
-
-  //Mark current recipe as a bookmark
-  // if an id of a recipe that we passed is equal to the recipe id of the current recipe - set a new ppty to TRUE
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
 
   persistBookmark();
@@ -115,7 +107,6 @@ init();
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-// clearBookmarks();
 
 export const uploadRecipe = async function (newRecipe) {
   try {
@@ -127,7 +118,7 @@ export const uploadRecipe = async function (newRecipe) {
         if (ingArr.length !== 3)
           throw new Error(
             'Wrong ingredient format! Please use the correct format'
-          ); // render to AddRcipeView
+          );
 
         const [quantity, unit, description] = ingArr;
 
